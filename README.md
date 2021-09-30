@@ -1,1 +1,1 @@
-# MERN-Project-1-
+# Exercise Tracker
