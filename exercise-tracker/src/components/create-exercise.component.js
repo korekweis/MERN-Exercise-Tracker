@@ -4,6 +4,7 @@ import React, { Component } from 'react';
  */
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import axios from 'axios';
 
 export default class CreateExercise extends Component {
     //create constructor firsr 
@@ -36,10 +37,24 @@ export default class CreateExercise extends Component {
     /** will be called before everything is loaded to the page */
     componentDidMount() {
         //use a test user first 
-        this.setState({
+        /*this.setState({
             users: ['test user'], 
             username: 'test user'
-        })
+        })*/
+
+        /** We will get through axios now */
+        axios.get('http://localhost:5000/users/')
+            .then(response => {
+                //check if there is atleast one user in the database
+                if (response.data.length > 0) {
+                    this.setState({
+                        /** map all the users and display the usernames */
+                        users: response.data.map(user => user.username), 
+                        /** set the username to the first user in the database */
+                        username: response.data[0].username
+                    })
+                }
+            })
     }
 
     //username
@@ -86,6 +101,10 @@ export default class CreateExercise extends Component {
         }
 
         console.log(exercise)
+
+        /** Connecting to the backend with axios */
+        axios.post('http://localhost:5000/exercises/add', exercise)
+            .then(res => console.log(res.data));
 
         /** once an exercise has been made we want to bring the user 
          * back to the homepage

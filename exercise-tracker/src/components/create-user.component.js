@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 export default class CreateUser extends Component {
 
@@ -7,6 +8,10 @@ export default class CreateUser extends Component {
 
         this.onChangeUsername = this.onChangeUsername.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+
+        this.state = {
+            username: '', 
+        }
     }
 
     //username
@@ -26,6 +31,11 @@ export default class CreateUser extends Component {
 
         console.log(user)
 
+        /** Sending data to the backend with axios:  */
+        axios.post('http://localhost:5000/users/add', user)
+            /**print the result */
+            .then(res => console.log(res.data));
+
         /**instead of going back to the homepage, we will stay in this page 
          * and set another username to blank
          */
@@ -37,7 +47,20 @@ export default class CreateUser extends Component {
     render() {
         return (
             <div>
-                <p>You are on the Create User component</p>
+                <h3>Create New User</h3>
+                <form onSubmit={this.onSubmit}>
+                    <div className="form-group">
+                        <label>Username: </label>
+                        <input type="text"
+                            className="form-control"
+                            value={this.state.username}
+                            onChange={this.onChangeUsername}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <input type="submit" value="Create User" className="btn btn-primary" />
+                    </div>
+                </form>
             </div>
         )
     }
